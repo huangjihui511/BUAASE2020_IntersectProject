@@ -114,7 +114,7 @@ namespace UnitTest1
 		{
 			Intersect intersect;
 			intersect.addLine(0, 0, 0, 1);
-			int num = 2000;
+			int num = 5000;
 			for (int i = 0; i < num; i++) {
 				intersect.addLine(0, i, 1, i);
 			}
@@ -132,6 +132,15 @@ namespace UnitTest1
 			intersect.addLine(0, 0, 1, 0);
 			intersect.addLine(0, 1, 1, 1);
 			Assert::AreEqual(intersect.intersect(), 2);
+		}
+	};
+	TEST_CLASS(UnitTest11)
+	{
+	public:
+
+		TEST_METHOD(TestMethod1)
+		{
+			;
 		}
 	};
 

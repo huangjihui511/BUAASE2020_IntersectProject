@@ -5,6 +5,7 @@
 #include <vector>
 #include "main.h"
 #include <exception>
+#include <set>
 
 using namespace std;
 
@@ -26,7 +27,7 @@ void Intersect::addLine(int x1, int y1, int x2, int y2)
 	lines.push_back(*line);
 }
 
-IntersectPoint Intersect::intersect2lines(Line line1, Line line2)
+void Intersect::intersect2lines(Line line1, Line line2)
 {
 	double  k1, b1, k2, b2, x, y;
 
@@ -36,12 +37,12 @@ IntersectPoint Intersect::intersect2lines(Line line1, Line line2)
 	b2 = line2.b;
 
 	if (k1 == k2) {
-		throw exception();
+		return;
 	}
 
 	IntersectPoint *intersectpoint = new IntersectPoint();
 	if (isinf(k1) && isinf(k2)) {
-		throw exception();
+		return;
 	}
 	else if (isinf(k1)) {
 		x = line1.x1;
@@ -54,7 +55,7 @@ IntersectPoint Intersect::intersect2lines(Line line1, Line line2)
 	else {
 		x = -(b1 - b2) / (k1 - k2);
 		if (isnan(x) || isinf(x)) {
-			throw exception();
+			return;
 		}
 		else {
 			y = k1 * x + b1;
@@ -62,7 +63,26 @@ IntersectPoint Intersect::intersect2lines(Line line1, Line line2)
 	}
 	intersectpoint->x = x;
 	intersectpoint->y = y;
-	return *intersectpoint;
+	addIntersectPoint(*intersectpoint);
+	return;
+}
+
+void Intersect::addIntersectPoint(IntersectPoint intersectpoint)
+{
+	/*
+	unsigned int k;
+	for (k = 0; k < intersectpoints.size(); k++) {
+		IntersectPoint ip2 = intersectpoints[k];
+		if (ip2.x == intersectpoint.x && ip2.y == intersectpoint.y) {
+			break;
+		}
+	}
+	if (k == intersectpoints.size()) {
+		intersectpoints.push_back(intersectpoint);
+	}
+	*/
+	intersectpoints.insert(pair<double,double>(intersectpoint.x, intersectpoint.y));
+	//intersectpoints->insert({ pair<double, double>(intersectpoint.x, intersectpoint.y), intersectpoint });
 }
 
 int Intersect::intersect()
@@ -72,22 +92,7 @@ int Intersect::intersect()
 	}
 	for (unsigned int i = 0;i < lines.size() - 1;i++) {
 		for (unsigned int j = i + 1;j < lines.size(); j++) {
-			try {
-				IntersectPoint ip = intersect2lines(lines[i], lines[j]);
-				unsigned int k;
-				for (k = 0; k < intersectpoints.size(); k++) {
-					IntersectPoint ip2 = intersectpoints[k];
-					if (ip2.x == ip.x && ip2.y == ip.y) {
-						break;
-					}
-				}
-				if (k == intersectpoints.size()) {
-					intersectpoints.push_back(ip);
-				}
-			}
-			catch (exception) {
-				;
-			}
+			intersect2lines(lines[i], lines[j]);
 		}
 	}
 	return intersectpoints.size();
@@ -97,7 +102,7 @@ int main()
 {
 	int num;
 	Intersect intersect;
-	int test = 1;
+	int test = 0;
 	if (!test) {
 		cin >> num;
 		for (int i = 0; i < num; i++) {

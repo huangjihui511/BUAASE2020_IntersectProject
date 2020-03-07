@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <set>
+#include <utility>
 
 using namespace std;
 
@@ -23,10 +25,12 @@ public:
 class Intersect {
 private:
 	vector<Line> lines;
-	vector<IntersectPoint> intersectpoints;
+	//unordered_map<pair<double, double>, IntersectPoint> *intersectpoints = new unordered_map<pair<double, double>, IntersectPoint>();
+	set<pair<double, double>> intersectpoints;
 
 public:
 	void addLine(int x1, int y1, int x2, int y2);
-	IntersectPoint intersect2lines(Line line1, Line line2);
+	void intersect2lines(Line line1, Line line2);
+	void addIntersectPoint(IntersectPoint intersectpoint);
 	int intersect();
 };
