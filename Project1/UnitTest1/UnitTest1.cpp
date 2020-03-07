@@ -114,7 +114,7 @@ namespace UnitTest1
 		{
 			Intersect intersect;
 			intersect.addLine(0, 0, 0, 1);
-			int num = 2;
+			int num = 10000;
 			for (int i = 0; i < num; i++) {
 				intersect.addLine(0, i, 1, i);
 			}

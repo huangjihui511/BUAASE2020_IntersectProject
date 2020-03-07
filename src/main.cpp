@@ -32,14 +32,27 @@ IntersectPoint Intersect::intersect2lines(Line line1, Line line2)
 	dx = (double)line2.x1 - (double)line2.x2;
 	k2 = dy / dx;
 	b2 = -k2 * line2.x1 + line2.y1;
-	x = -(b1 - b2) / (k1 - k2);
-	if (isnan(x)) {
+	IntersectPoint *intersectpoint = new IntersectPoint();
+	if (isinf(k1) && isinf(k2)) {
 		throw exception();
 	}
-	else {
+	else if (isinf(k1)) {
+		x = line1.x1;
+		y = k2 * x + b2;
+	}
+	else if (isinf(k2)) {
+		x = line2.x1;
 		y = k1 * x + b1;
 	}
-	IntersectPoint *intersectpoint = new IntersectPoint();
+	else {
+		x = -(b1 - b2) / (k1 - k2);
+		if (isnan(x) || isinf(x)) {
+			throw exception();
+		}
+		else {
+			y = k1 * x + b1;
+		}
+	}
 	intersectpoint->x = x;
 	intersectpoint->y = y;
 	return *intersectpoint;
@@ -77,6 +90,7 @@ int main()
 {
 	int num;
 	Intersect intersect;
+	/*
 	cin >> num;
 	for (int i = 0; i < num; i++) {
 		int x1, x2, y1, y2;
@@ -88,6 +102,14 @@ int main()
 		cin >> y2;
 		intersect.addLine(x1, y2, x2, y2);
 	}
+	*/
+
+	intersect.addLine(0, 0, 0, 1);
+	num = 5000;
+	for (int i = 0; i < num; i++) {
+		intersect.addLine(0, i, 1, i);
+	}
+
 	cout << intersect.intersect();
 }
 
