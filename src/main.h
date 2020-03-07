@@ -10,6 +10,8 @@ public:
 	int x2;
 	int y1;
 	int y2;
+	double k;
+	double b;
 };
 
 class IntersectPoint {
