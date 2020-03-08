@@ -176,15 +176,49 @@ namespace UnitTest1
 		TEST_METHOD(TestMethod1)
 		{
 			Intersect intersect;
-			int num = 2;
+			int num = 1000;
 			for (int i = 0; i < num; i++) {
 				intersect.addLine(i, 0, i - 1, 1);
 			}
 			for (int i = 0; i < num; i++) {
 				intersect.addLine(i, 0, i + 1, 1);
 			}
-			Assert::AreEqual(intersect.intersect(), 2 * num);
+			Assert::AreEqual(intersect.intersect(), num * num);
+			cout << "flag" << intersect.intersect();
 		}
+	};
+	TEST_CLASS(UnitTest14)
+	{
+	public:
+
+		TEST_METHOD(TestMethod1)
+		{
+			Intersect intersect;
+			intersect.addCmd("C 1 0 2");
+			intersect.addCmd("C 2 2 1");
+			intersect.addCmd("C 3 -2 6");
+			intersect.addCmd("L -1 4 4 -1");
+			Assert::AreEqual(intersect.intersect(), 6);
+			cout << "flag";
+		}
+
+	};
+	TEST_CLASS(UnitTest15)
+	{
+	public:
+
+		TEST_METHOD(TestMethod1)
+		{
+			Intersect intersect;
+			int num = 1000;
+			for (int i = 0; i < num; i++) {
+				intersect.addCircle(i, 0, 1);
+			}
+			
+			Assert::AreEqual(intersect.intersect(), 3 * num - 4);
+			cout << "flag";
+		}
+
 	};
 
 }

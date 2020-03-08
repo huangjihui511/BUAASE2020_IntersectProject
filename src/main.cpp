@@ -110,7 +110,7 @@ void Intersect::intersect2circles(Circle circle1, Circle circle2)
 	double y2 = (double)circle2.y;
 	double r1 = (double)circle1.r;
 	double r2 = (double)circle2.r;
-	double k = (x2 - x1) / (y2 - y1);
+	double k = -(x2 - x1) / (y2 - y1);
 	double b = (((r1 * r1 - r2 * r2) - (-x1 - x2) *(x2 - x1)) / (y2 - y1) + y1 + y2) / 2;
 	Line l;
 	l.k = k;
@@ -145,9 +145,9 @@ void Intersect::intersectLine2circle(Line line, Circle circle)
 	}
 	else {
 		double a = 1 + k * k;
-		double b2 = -2 * x1 + 2 * k * b;
-		double c = x1 * x1 + b * b + y1 * y1 - 2 * k * y1 - 2 * b * y1 - r * r;
-		double d = b * b - 4 * a * c;
+		double b2 = -2 * x1 + 2 * k * b - 2 * k * y1;
+		double c = x1 * x1 + b * b + y1 * y1 - 2 * b * y1 - r * r;
+		double d = b2 * b2 - 4 * a * c;
 		if (d >= 0) {
 			double ans_x1 = (-b2 + sqrt(d)) / (2 * a);
 			double ans_y1 = ans_x1 * k + b;
@@ -174,20 +174,17 @@ void Intersect::addIntersectPoint(IntersectPoint intersectpoint)
 
 int Intersect::intersect()
 {
-	if (lines.size() == 0) {
-		return 0;
-	}
-	for (unsigned int i = 0;i < lines.size() - 1;i++) {
+	for (unsigned int i = 0;lines.size() != 0 && i < lines.size() - 1;i++) {
 		for (unsigned int j = i + 1;j < lines.size(); j++) {
 			intersect2lines(lines[i], lines[j]);
 		}
 	}
-	for (unsigned int i = 0; i < circles.size() - 1; i++) {
+	for (unsigned int i = 0; circles.size() != 0 && i < circles.size() - 1; i++) {
 		for (unsigned int j = i + 1; j < circles.size(); j++) {
 			intersect2circles(circles[i], circles[j]);
 		}
 	}
-	for (unsigned int i = 0; i < lines.size(); i++) {
+	for (unsigned int i = 0;i < lines.size(); i++) {
 		for (unsigned int j = 0; j < circles.size(); j++) {
 			intersectLine2circle(lines[i], circles[j]);
 		}
