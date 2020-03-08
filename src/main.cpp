@@ -106,7 +106,7 @@ int main(int argc, char **argv)
 {
 	int num;
 	Intersect intersect;
-	int test = 1;
+	int test = 0;
 	int x1, x2, y1, y2;
 	char c;
 	if (test) {
