@@ -140,7 +140,50 @@ namespace UnitTest1
 
 		TEST_METHOD(TestMethod1)
 		{
-			;
+			Intersect intersect;
+			intersect.addLine(0, 0, 0, 1);
+			intersect.addLine(1, 0, 1, 1);
+			int num = 5000;
+			for (int i = 0; i < num; i++) {
+				intersect.addLine(0, i, 1, i);
+			}
+			Assert::AreEqual(intersect.intersect(), 2 * num);
+		}
+	};
+	TEST_CLASS(UnitTest12)
+	{
+	public:
+
+		TEST_METHOD(TestMethod1)
+		{
+			Intersect intersect;
+			intersect.addLine(0, 0, 0, 1);
+			intersect.addLine(1, 0, 1, 1);
+			int num = 500;
+			for (int i = 0; i < num; i++) {
+				intersect.addLine(0, i, 1, i);
+			}
+			for (int i = 0; i < num; i++) {
+				intersect.addLine(i, 0, i, 1);
+			}
+			Assert::AreEqual(intersect.intersect(), num * num);
+		}
+	};
+	TEST_CLASS(UnitTest13)
+	{
+	public:
+
+		TEST_METHOD(TestMethod1)
+		{
+			Intersect intersect;
+			int num = 2;
+			for (int i = 0; i < num; i++) {
+				intersect.addLine(i, 0, i - 1, 1);
+			}
+			for (int i = 0; i < num; i++) {
+				intersect.addLine(i, 0, i + 1, 1);
+			}
+			Assert::AreEqual(intersect.intersect(), 2 * num);
 		}
 	};
 

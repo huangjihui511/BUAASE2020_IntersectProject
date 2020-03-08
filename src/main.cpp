@@ -6,6 +6,10 @@
 #include "main.h"
 #include <exception>
 #include <set>
+#include <cmath>
+#include <string>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -98,16 +102,26 @@ int Intersect::intersect()
 	return intersectpoints.size();
 }
 
-int main()
+int main(int argc, char **argv)
 {
 	int num;
 	Intersect intersect;
-	int test = 0;
-	if (!test) {
+	int test = 1;
+	int x1, x2, y1, y2;
+	char c;
+	if (test) {
+		intersect.addLine(0, 0, 0, 1);
+		num = 5000;
+		for (int i = 0; i < num; i++) {
+			intersect.addLine(0, i, 1, i);
+		}
+		cout << intersect.intersect();
+		return 0;
+	}
+	if (argc < 2) {
 		cin >> num;
 		for (int i = 0; i < num; i++) {
-			int x1, x2, y1, y2;
-			char c;
+				
 			cin >> c;
 			cin >> x1;
 			cin >> y1;
@@ -115,14 +129,32 @@ int main()
 			cin >> y2;
 			intersect.addLine(x1, y2, x2, y2);
 		}
+		cout << intersect.intersect();
 	}
 	else {
-		intersect.addLine(0, 0, 0, 1);
-		num = 5000;
-		for (int i = 0; i < num; i++) {
-			intersect.addLine(0, i, 1, i);
+		ifstream in(argv[2]);
+		ofstream out(argv[4]);
+		string text;
+		if (!in)
+		{
+			cout << "文件打开失败！" << argv[2] << endl;
+			exit(1);
 		}
+		getline(in, text);
+		num = stoi(text);
+		for (int i = 0; i < num; i++) {
+			getline(in, text);
+			string buf1, buf2, buf3, buf4, buf5;
+			stringstream s(text);
+			s >> buf1 >> buf2 >> buf3 >> buf4 >> buf5;
+			x1 = stoi(buf2);
+			y1 = stoi(buf3);
+			x2 = stoi(buf4);
+			y2 = stoi(buf5);
+			intersect.addLine(x1, y1, x2, y2);
+		}
+		//cout << intersect.intersect();
+		out << intersect.intersect();
 	}
-	cout << intersect.intersect();
 }
 
