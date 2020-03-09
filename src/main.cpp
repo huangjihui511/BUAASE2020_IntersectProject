@@ -196,13 +196,17 @@ int main(int argc, char **argv)
 {
 	int num;
 	Intersect intersect;
-	int test = 0;
+	int test = 1;
 	if (test) {
 		intersect.addLine(0, 0, 0, 1);
 		num = 5000;
 		for (int i = 0; i < num; i++) {
 			intersect.addLine(0, i, 1, i);
 		}
+		for (int i = 0; i < num; i++) {
+			intersect.addCircle(i, 0, 1);
+		}
+
 		cout << intersect.intersect();
 		return 0;
 	}
