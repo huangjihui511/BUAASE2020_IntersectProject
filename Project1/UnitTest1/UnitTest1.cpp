@@ -210,7 +210,7 @@ namespace UnitTest1
 		TEST_METHOD(TestMethod1)
 		{
 			Intersect intersect;
-			int num = 1000;
+			int num = 5000;
 			for (int i = 0; i < num; i++) {
 				intersect.addCircle(i, 0, 1);
 			}

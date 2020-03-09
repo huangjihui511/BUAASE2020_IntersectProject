@@ -4,6 +4,8 @@
 #include <set>
 #include <utility>
 
+#define MAX_NUM 5000
+
 using namespace std;
 
 class Line {
@@ -33,6 +35,12 @@ class Intersect {
 private:
 	vector<Line> lines;
 	vector<Circle> circles;
+	/*
+	Line lines[MAX_NUM];
+	Circle circles[MAX_NUM];
+	int size_of_lines = 0;
+	int size_of_circles = 0;
+	*/
 	//unordered_map<pair<double, double>, IntersectPoint> *intersectpoints = new unordered_map<pair<double, double>, IntersectPoint>();
 	set<pair<double, double>> intersectpoints;
 
