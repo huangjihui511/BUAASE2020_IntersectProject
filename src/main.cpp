@@ -13,7 +13,17 @@
 
 using namespace std;
 
-
+double Round(double dVal, short iPlaces) {
+	double dRetval;
+	double dMod = 0.0000001;
+	if (dVal < 0.0) dMod = -0.0000001;
+	dRetval = dVal;
+	dRetval += (5.0 / pow(10.0, iPlaces + 1.0));
+	dRetval *= pow(10.0, iPlaces);
+	dRetval = floor(dRetval + dMod);
+	dRetval /= pow(10.0, iPlaces);
+	return(dRetval);
+}
 
 
 void Intersect::addCmd(string text)
@@ -186,8 +196,9 @@ void Intersect::intersectLine2circle(Line line, Circle circle)
 
 void Intersect::addIntersectPoint(IntersectPoint intersectpoint)
 {
-
-	intersectpoints.insert(pair<double,double>(intersectpoint.x, intersectpoint.y));
+	double x = Round(intersectpoint.x,10);
+	double y = Round(intersectpoint.y,10);
+	intersectpoints.insert(pair<double, double>(x, y));
 }
 
 int Intersect::intersect()
@@ -201,14 +212,15 @@ int Intersect::intersect()
 		}
 	}
 	for (unsigned int i = 0; circles_size != 0 && i < circles_size - 1; i++) {
-		
+		Circle circle = circles[i];
 		for (unsigned int j = i + 1; j < circles_size; j++) {
-			intersect2circles(circles[i], circles[j]);
+			intersect2circles(circle, circles[j]);
 		}
 	}
 	for (unsigned int i = 0;i < lines_size; i++) {
+		Line line = lines[i];
 		for (unsigned int j = 0; j < circles_size; j++) {
-			intersectLine2circle(lines[i], circles[j]);
+			intersectLine2circle(line, circles[j]);
 		}
 	}
 	/*
@@ -228,7 +240,18 @@ int Intersect::intersect()
 		}
 	}
 	*/
+	//printIntersectPoint();
 	return intersectpoints.size();
+}
+
+void Intersect::printIntersectPoint()
+{
+	ofstream out("points.txt");
+	for (auto p : intersectpoints) {
+		cout << p.first << " " << p.second << endl;
+		out << p.first << " " << p.second << endl;
+	}
+
 }
 
 int main(int argc, char **argv)
@@ -277,6 +300,7 @@ int main(int argc, char **argv)
 		}
 		//cout << intersect.intersect();
 		out << intersect.intersect();
+		//intersect.printIntersectPoint();
 	}
 }
 

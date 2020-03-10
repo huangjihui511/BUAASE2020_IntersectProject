@@ -53,4 +53,5 @@ public:
 	void intersectLine2circle(Line line, Circle circle);
 	void addIntersectPoint(IntersectPoint intersectpoint);
 	int intersect();
+	void printIntersectPoint();
 };
