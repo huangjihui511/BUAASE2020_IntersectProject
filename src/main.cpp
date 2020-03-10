@@ -10,11 +10,10 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-
 using namespace std;
 
 double Round(double dVal, short iPlaces) {
-	double dRetval;
+	double dRetval = 0;
 	double dMod = 0.0000001;
 	if (dVal < 0.0) dMod = -0.0000001;
 	dRetval = dVal;
@@ -29,17 +28,17 @@ double Round(double dVal, short iPlaces) {
 void Intersect::addCmd(string text)
 {
 	string buf1, buf2, buf3, buf4, buf5;
-	int x1, x2, y1, y2, r;
+	int x1 = 0, x2 = 0, y1 = 0, y2 = 0, r = 0;
 	stringstream s(text);
 	s >> buf1 >> buf2 >> buf3 >> buf4 >> buf5;
-	if (buf1[0] == 'L') {
+	if (buf1.at(0) == 'L') {
 		x1 = stoi(buf2);
 		y1 = stoi(buf3);
 		x2 = stoi(buf4);
 		y2 = stoi(buf5);
 		this->addLine(x1, y1, x2, y2);
 	}
-	else if (buf1[0] == 'C') {
+	else if (buf1.at(0) == 'C') {
 		x1 = stoi(buf2);
 		y1 = stoi(buf3);
 		r = stoi(buf4);
@@ -50,7 +49,8 @@ void Intersect::addCmd(string text)
 
 void Intersect::addCircle(int x, int y, int r)
 {
-	Circle *circle = new Circle();
+	unique_ptr<Circle> circle = make_unique<Circle>();
+	//Circle *circle = new Circle();
 	circle->x = x;
 	circle->y = y;
 	circle->r = r;
@@ -65,11 +65,11 @@ void Intersect::addCircle(int x, int y, int r)
 
 void Intersect::addLine(int x1, int y1, int x2, int y2)
 {
-	double dy, dx;
-	dy = (double)y1 - (double)y2;
-	dx = (double)x1 - (double)x2;
-	
-	Line *line = new Line();
+	double dy = 0, dx = 0;
+	dy = static_cast<double>(y1) - static_cast<double>(y2);
+	dx = static_cast<double>(x1) - static_cast<double>(x2);
+	unique_ptr<Line> line = make_unique<Line>();
+	//Line *line = new Line();
 	line->x1 = x1;
 	line->y1 = y1;
 	line->x2 = x2;
@@ -92,7 +92,7 @@ void Intersect::addLine(int x1, int y1, int x2, int y2)
 
 void Intersect::intersect2lines(Line line1, Line line2)
 {
-	double  k1, b1, k2, b2, x, y;
+	double  k1 = 0, b1 = 0, k2 = 0, b2 = 0, x = 0, y = 0;
 
 	k1 = line1.k;
 	b1 = line1.b;
@@ -103,7 +103,8 @@ void Intersect::intersect2lines(Line line1, Line line2)
 		return;
 	}
 
-	IntersectPoint *intersectpoint = new IntersectPoint();
+	unique_ptr<IntersectPoint> intersectpoint = make_unique<IntersectPoint>();
+	//IntersectPoint *intersectpoint = new IntersectPoint();
 	if (isinf(k1) && isinf(k2)) {
 		return;
 	}
@@ -132,14 +133,14 @@ void Intersect::intersect2lines(Line line1, Line line2)
 
 void Intersect::intersect2circles(Circle circle1, Circle circle2)
 {
-	double x1 = (double)circle1.x;
-	double y1 = (double)circle1.y;
-	double x2 = (double)circle2.x;
-	double y2 = (double)circle2.y;
-	double r1 = (double)circle1.r;
-	double r2 = (double)circle2.r;
-	double k = -(x2 - x1) / (y2 - y1);
-	double b = (((r1 * r1 - r2 * r2) - (-x1 - x2) *(x2 - x1)) / (y2 - y1) + y1 + y2) / 2;
+	const double x1 = static_cast<double>(circle1.x);
+	const double y1 = static_cast<double>(circle1.y);
+	const double x2 = static_cast<double>(circle2.x);
+	const double y2 = static_cast<double>(circle2.y);
+	const double r1 = static_cast<double>(circle1.r);
+	const double r2 = static_cast<double>(circle2.r);
+	const double k = -(x2 - x1) / (y2 - y1);
+	const double b = (((r1 * r1 - r2 * r2) - (-x1 - x2) *(x2 - x1)) / (y2 - y1) + y1 + y2) / 2;
 	Line l;
 	l.k = k;
 	l.b = b;
@@ -150,17 +151,17 @@ void Intersect::intersect2circles(Circle circle1, Circle circle2)
 
 void Intersect::intersectLine2circle(Line line, Circle circle)
 {
-	double k = line.k;
-	double b = line.b;
-	double x1 = circle.x;
-	double y1 = circle.y;
-	double r= circle.r;
+	const double k = line.k;
+	const double b = line.b;
+	const double x1 = circle.x;
+	const double y1 = circle.y;
+	const double r= circle.r;
 	if (isinf(k)) {
-		double ans_x1 = line.x1;
-		double d = r * r - (ans_x1 - x1) * (ans_x1 - x1);
+		const double ans_x1 = line.x1;
+		const double d = r * r - (ans_x1 - x1) * (ans_x1 - x1);
 		if (d >= 0) {
-			double ans_y1 = y1 + sqrt(d);
-			double ans_y2 = y1 - sqrt(d);
+			const double ans_y1 = y1 + sqrt(d);
+			const double ans_y2 = y1 - sqrt(d);
 			IntersectPoint i1;
 			IntersectPoint i2;
 			i1.x = ans_x1;
@@ -172,15 +173,15 @@ void Intersect::intersectLine2circle(Line line, Circle circle)
 		}
 	}
 	else {
-		double a = 1 + k * k;
-		double b2 = -2 * x1 + 2 * k * b - 2 * k * y1;
-		double c = x1 * x1 + b * b + y1 * y1 - 2 * b * y1 - r * r;
-		double d = b2 * b2 - 4 * a * c;
+		const double a = 1 + k * k;
+		const double b2 = -2 * x1 + 2 * k * b - 2 * k * y1;
+		const double c = x1 * x1 + b * b + y1 * y1 - 2 * b * y1 - r * r;
+		const double d = b2 * b2 - 4 * a * c;
 		if (d >= 0) {
-			double ans_x1 = (-b2 + sqrt(d)) / (2 * a);
-			double ans_y1 = ans_x1 * k + b;
-			double ans_x2 = (-b2 - sqrt(d)) / (2 * a);
-			double ans_y2 = ans_x2 * k + b;
+			const double ans_x1 = (-b2 + sqrt(d)) / (2 * a);
+			const double ans_y1 = ans_x1 * k + b;
+			const double ans_x2 = (-b2 - sqrt(d)) / (2 * a);
+			const double ans_y2 = ans_x2 * k + b;
 			IntersectPoint i1;
 			IntersectPoint i2;
 			i1.x = ans_x1;
@@ -203,24 +204,24 @@ void Intersect::addIntersectPoint(IntersectPoint intersectpoint)
 
 int Intersect::intersect()
 {
-	unsigned int lines_size = lines.size();
-	unsigned int circles_size = circles.size();
+	const unsigned int lines_size = lines.size();
+	const unsigned int circles_size = circles.size();
 	for (unsigned int i = 0;lines_size != 0 && i < lines_size - 1;i++) {
-		Line line = lines[i];
+		const Line line = lines.at(i);
 		for (unsigned int j = i + 1;j < lines_size; j++) {
-			intersect2lines(line, lines[j]);
+			intersect2lines(line, lines.at(j));
 		}
 	}
 	for (unsigned int i = 0; circles_size != 0 && i < circles_size - 1; i++) {
-		Circle circle = circles[i];
+		const Circle circle = circles.at(i);
 		for (unsigned int j = i + 1; j < circles_size; j++) {
-			intersect2circles(circle, circles[j]);
+			intersect2circles(circle, circles.at(j));
 		}
 	}
 	for (unsigned int i = 0;i < lines_size; i++) {
-		Line line = lines[i];
+		const Line line = lines.at(i);
 		for (unsigned int j = 0; j < circles_size; j++) {
-			intersectLine2circle(line, circles[j]);
+			intersectLine2circle(line, circles.at(j));
 		}
 	}
 	/*
@@ -256,9 +257,9 @@ void Intersect::printIntersectPoint()
 
 int main(int argc, char **argv)
 {
-	int num;
+	int num = 0;
 	Intersect intersect;
-	int test = 1;
+	const int test = 0;
 	if (test) {
 		intersect.addLine(0, 0, 0, 1);
 		num = 5000;
@@ -283,9 +284,11 @@ int main(int argc, char **argv)
 		}
 		cout << intersect.intersect();
 	}
-	else {
-		ifstream in(argv[2]);
-		ofstream out(argv[4]);
+	else if(argc == 5){
+		string infile = string(argv[2]);
+		string outfile = string(argv[4]);
+		ifstream in(infile);
+		ofstream out(outfile);
 		string text;
 		if (!in)
 		{
